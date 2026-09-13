@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#116149">
+  <title>Assessment Survey</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6653108470296139" crossorigin="anonymous"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div class="shape shape-one" aria-hidden="true"></div>
+  <div class="shape shape-two" aria-hidden="true"></div>
+  <div class="shape shape-three" aria-hidden="true"></div>
+
+  <main class="page-shell">
+    <header class="intro">
+      <div class="eyebrow"><span class="eyebrow-dot"></span> Candidate experience</div>
+      <h1>Assessment<br><em>Survey</em></h1>
+      <p>Please share how your assessment went while it is still fresh. Your feedback helps us make every assessment clearer, calmer, and more accessible.</p>
+      <div class="intro-meta"><span class="status-dot" id="connectionDot"></span><span id="connectionStatus">Preparing secure submission...</span><button type="button" id="openAdminLogin" class="admin-link">Admin dashboard</button></div>
+    </header>
+
+    <form id="surveyForm" class="survey-card">
+      <div class="survey-progress"><span>Assessment feedback</span><span>Required fields marked *</span></div>
+
+      <fieldset>
+        <legend><span class="question-number">01</span> Mode of assessment <span class="required">*</span></legend>
+        <div class="choice-grid two-columns">
+          <label class="choice-card"><input type="radio" name="assessmentMode" value="Onsite" required><span>Onsite</span><small>At an assessment location</small></label>
+          <label class="choice-card"><input type="radio" name="assessmentMode" value="Virtual/Remote"><span>Virtual / Remote</span><small>Completed online</small></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend><span class="question-number">02</span> Location <span class="required">*</span></legend>
+        <div class="choice-grid four-columns">
+          <label class="choice-card compact"><input type="radio" name="location" value="Iloilo" required><span>Iloilo</span></label>
+          <label class="choice-card compact"><input type="radio" name="location" value="Bohol"><span>Bohol</span></label>
+          <label class="choice-card compact"><input type="radio" name="location" value="Quezon City"><span>Quezon City</span></label>
+          <label class="choice-card compact"><input type="radio" name="location" value="Alabang"><span>Alabang</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend><span class="question-number">03</span> How comfortable were you during the assessment? <span class="required">*</span></legend>
+        <div class="rating-row" data-rating="comfort" role="radiogroup" aria-label="Comfort rating from 1 to 5">
+          <button type="button" class="rating-option" data-value="1" aria-label="1 - Very uncomfortable"><span>😟</span><small>Very uncomfortable</small></button>
+          <button type="button" class="rating-option" data-value="2" aria-label="2 - Uncomfortable"><span>🙁</span><small>Uncomfortable</small></button>
+          <button type="button" class="rating-option" data-value="3" aria-label="3 - Neutral"><span>😐</span><small>Neutral</small></button>
+          <button type="button" class="rating-option" data-value="4" aria-label="4 - Comfortable"><span>🙂</span><small>Comfortable</small></button>
+          <button type="button" class="rating-option" data-value="5" aria-label="5 - Very comfortable"><span>😄</span><small>Very comfortable</small></button>
+        </div>
+        <input type="hidden" name="comfortRating" required>
+      </fieldset>
+
+      <fieldset>
+        <legend><span class="question-number">04</span> How would you rate your overall assessment experience? <span class="required">*</span></legend>
+        <div class="rating-row" data-rating="experience" role="radiogroup" aria-label="Experience rating from 1 to 5">
+          <button type="button" class="rating-option" data-value="1" aria-label="1 - Very poor"><span>😟</span><small>Very poor</small></button>
+          <button type="button" class="rating-option" data-value="2" aria-label="2 - Poor"><span>🙁</span><small>Poor</small></button>
+          <button type="button" class="rating-option" data-value="3" aria-label="3 - Fair"><span>😐</span><small>Fair</small></button>
+          <button type="button" class="rating-option" data-value="4" aria-label="4 - Good"><span>🙂</span><small>Good</small></button>
+          <button type="button" class="rating-option" data-value="5" aria-label="5 - Excellent"><span>😄</span><small>Excellent</small></button>
+        </div>
+        <input type="hidden" name="experienceRating" required>
+      </fieldset>
+
+      <fieldset>
+        <legend><span class="question-number">05</span> How was the environment where you completed the assessment? <span class="required">*</span></legend>
+        <textarea name="environmentFeedback" rows="3" placeholder="Tell us about the space, setup, or online environment..." required></textarea>
+      </fieldset>
+
+      <fieldset>
+        <legend><span class="question-number">06</span> Were there any technical issues during the assessment? <span class="required">*</span></legend>
+        <div class="choice-grid two-columns">
+          <label class="choice-card"><input type="radio" name="technicalIssues" value="Yes" required><span>Yes</span><small>Something interrupted the assessment</small></label>
+          <label class="choice-card"><input type="radio" name="technicalIssues" value="No"><span>No</span><small>Everything worked as expected</small></label>
+        </div>
+      </fieldset>
+
+      <section id="issueDetails" class="conditional-panel" hidden>
+        <div class="conditional-heading"><span class="warning-icon">!</span><div><strong>Help us understand the issue</strong><p>Select all that applied.</p></div></div>
+        <div class="issue-grid">
+          <label><input type="checkbox" name="issueType" value="Internet"><span>Internet</span></label>
+          <label><input type="checkbox" name="issueType" value="Keyboard"><span>Keyboard</span></label>
+          <label><input type="checkbox" name="issueType" value="Mouse"><span>Mouse</span></label>
+          <label><input type="checkbox" name="issueType" value="Headset"><span>Headset</span></label>
+        </div>
+        <label class="text-label" for="seatNumber">Seat number where you encountered the issue</label>
+        <input id="seatNumber" name="seatNumber" type="text" placeholder="e.g. A-12">
+      </section>
+
+      <section id="feedbackSection" class="feedback-panel">
+        <label class="text-label" for="feedback"><span class="question-number">07</span> What feedback, concerns, or suggestions for improvement would you like to share regarding your assessment?</label>
+        <textarea id="feedback" name="feedback" rows="3" placeholder="What should we keep, change, or improve?"></textarea>
+      </section>
+
+      <div class="form-actions">
+        <button type="button" id="startOver" class="secondary-button">Start over</button>
+        <button type="submit" class="submit-button"><span>Submit feedback</span><span aria-hidden="true">↗</span></button>
+      </div>
+      <p id="formMessage" class="form-message" role="status" aria-live="polite"></p>
+    </form>
+  </main>
+
+  <main id="loginView" class="login-view is-hidden" aria-labelledby="loginTitle">
+    <section class="login-card">
+      <div class="eyebrow dark-eyebrow"><span class="eyebrow-dot"></span> Secure workspace</div>
+      <h2 id="loginTitle">Welcome<br><em>back.</em></h2>
+      <p>Sign in to review assessment feedback across every browser.</p>
+      <form id="loginForm">
+        <label class="text-label" for="adminUsername">Username</label>
+        <input id="adminUsername" type="text" autocomplete="username" required>
+        <label class="text-label" for="adminPassword">Password</label>
+        <input id="adminPassword" type="password" autocomplete="current-password" required>
+        <button type="submit" class="submit-button login-submit">Log in <span aria-hidden="true">↗</span></button>
+        <p id="loginMessage" class="form-message" role="alert"></p>
+      </form>
+      <button type="button" id="backToSurvey" class="back-link">Back to survey</button>
+    </section>
+  </main>
+
+  <main id="dashboardView" class="dashboard-view is-hidden" aria-labelledby="dashboardTitle">
+    <section class="dashboard-card">
+      <header class="dashboard-header">
+        <div>
+          <div class="eyebrow dark-eyebrow"><span class="eyebrow-dot"></span> Live response history</div>
+          <h2 id="dashboardTitle">Assessment feedback</h2>
+          <p>Review all submitted assessment responses in one place.</p>
+        </div>
+        <div class="dashboard-actions"><span id="responseCount" class="response-count">0 responses</span><button type="button" id="dashboardLogout" class="secondary-button">Log out</button></div>
+      </header>
+      <div class="dashboard-toolbar"><input id="tableSearch" type="search" placeholder="Search responses..." aria-label="Search responses"><button type="button" id="refreshTable" class="secondary-button">Refresh</button><label class="date-filter">From <input id="exportFromDate" type="date"></label><label class="date-filter">End <input id="exportEndDate" type="date"></label><button type="button" id="exportResponses" class="secondary-button export-button">Export CSV</button></div>
+      <div class="score-legend" aria-label="Score legend"><strong>Score legend</strong><span>1 - Very uncomfortable / Very poor</span><span>2 - Uncomfortable / Poor</span><span>3 - Neutral / Fair</span><span>4 - Comfortable / Good</span><span>5 - Very comfortable / Excellent</span></div>
+      <div class="response-table-wrap">
+        <table class="response-table">
+          <thead><tr><th>Select</th><th>#</th><th>Submitted</th><th>Mode</th><th>Location</th><th>Comfort</th><th>Experience</th><th>Technical issues</th><th>Issue types</th><th>Seat number</th><th>Environment</th><th>Feedback</th></tr></thead>
+          <tbody id="responseTableBody"><tr><td colspan="12" class="empty-table">Loading responses...</td></tr></tbody>
+        </table>
+      </div>
+      <div class="table-footer-actions"><button type="button" id="selectVisible" class="secondary-button">Select all</button><button type="button" id="deleteSelected" class="secondary-button danger-button">Delete selected</button></div>
+      <p id="dashboardMessage" class="form-message" role="status"></p>
+    </section>
+  </main>
+</body>
+</html>
