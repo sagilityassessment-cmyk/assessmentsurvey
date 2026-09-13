@@ -117,13 +117,14 @@
       <h2 id="loginTitle">Welcome<br><em>back.</em></h2>
       <p>Sign in to review assessment feedback across every browser.</p>
       <form id="loginForm">
-        <label class="text-label" for="adminUsername">Username</label>
-        <input id="adminUsername" type="text" autocomplete="username" required>
+        <label class="text-label" for="adminEmail">Company email</label>
+        <input id="adminEmail" type="email" autocomplete="username" required>
         <label class="text-label" for="adminPassword">Password</label>
         <input id="adminPassword" type="password" autocomplete="current-password" required>
         <button type="submit" class="submit-button login-submit">Log in <span aria-hidden="true">↗</span></button>
         <p id="loginMessage" class="form-message" role="alert"></p>
       </form>
+      <button type="button" id="resetPassword" class="back-link">Reset password by email</button>
       <button type="button" id="backToSurvey" class="back-link">Back to survey</button>
     </section>
   </main>

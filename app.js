@@ -9,6 +9,7 @@ const firebaseConfig = {
 };
 
 let firestore = null;
+let auth = null;
 let firebaseReady = false;
 
 const form = document.querySelector('#surveyForm');
@@ -23,7 +24,7 @@ let allResponses = [];
 let responseListener = null;
 const selectedResponseIds = new Set();
 
-const adminCredentials = { username: 'SagilityAssessment', password: 'Sagility_1' };
+const adminEmail = 'sagilityassessment@gmail.com';
 const dashboardSessionKey = 'assessment-dashboard-open';
 
 function setMessage(text, isError = false) {
@@ -71,6 +72,7 @@ document.querySelector('#dashboardLogout').addEventListener('click', () => {
   if (responseListener) responseListener();
   responseListener = null;
   sessionStorage.removeItem(dashboardSessionKey);
+  auth.signOut().then(() => auth.signInAnonymously());
   showView('survey');
 });
 
@@ -191,21 +193,45 @@ function listenForResponses() {
   });
 }
 
-document.querySelector('#loginForm').addEventListener('submit', (event) => {
+document.querySelector('#loginForm').addEventListener('submit', async (event) => {
   event.preventDefault();
-  const username = document.querySelector('#adminUsername').value;
+  const email = document.querySelector('#adminEmail').value.trim().toLowerCase();
   const password = document.querySelector('#adminPassword').value;
   const loginMessage = document.querySelector('#loginMessage');
-  if (username !== adminCredentials.username || password !== adminCredentials.password) {
-    loginMessage.textContent = 'Incorrect username or password.';
+  if (email !== adminEmail) {
+    loginMessage.textContent = 'This email is not authorized for the dashboard.';
     loginMessage.classList.add('error');
     return;
   }
-  loginMessage.textContent = '';
-  loginMessage.classList.remove('error');
-  sessionStorage.setItem(dashboardSessionKey, 'true');
-  showView('dashboard');
-  listenForResponses();
+  try {
+    await auth.signInWithEmailAndPassword(email, password);
+    loginMessage.textContent = '';
+    loginMessage.classList.remove('error');
+    sessionStorage.setItem(dashboardSessionKey, 'true');
+    showView('dashboard');
+    listenForResponses();
+  } catch (error) {
+    loginMessage.textContent = 'Incorrect email or password.';
+    loginMessage.classList.add('error');
+  }
+});
+
+document.querySelector('#resetPassword').addEventListener('click', async () => {
+  const email = document.querySelector('#adminEmail').value.trim().toLowerCase();
+  const loginMessage = document.querySelector('#loginMessage');
+  if (email !== adminEmail) {
+    loginMessage.textContent = 'Enter the authorized Gmail address to reset its password.';
+    loginMessage.classList.add('error');
+    return;
+  }
+  try {
+    await auth.sendPasswordResetEmail(email);
+    loginMessage.textContent = 'Password reset email sent. Check your Gmail inbox.';
+    loginMessage.classList.remove('error');
+  } catch (error) {
+    loginMessage.textContent = 'Unable to send the reset email. Check Firebase Auth setup.';
+    loginMessage.classList.add('error');
+  }
 });
 
 document.querySelector('#tableSearch').addEventListener('input', renderResponses);
@@ -298,13 +324,15 @@ function initializeFirebase() {
     if (!window.firebase) throw new Error('Firebase SDK unavailable');
     const app = firebase.initializeApp(firebaseConfig);
     firestore = app.firestore();
-    firebase.auth().signInAnonymously().then(() => {
+    auth = firebase.auth();
+    const signIn = auth.currentUser ? Promise.resolve(auth.currentUser) : auth.signInAnonymously();
+    signIn.then((user) => {
       firebaseReady = true;
       status.textContent = 'Ready for secure submission';
-        if (sessionStorage.getItem(dashboardSessionKey) === 'true') {
-          showView('dashboard');
-          listenForResponses();
-        }
+      if (user.email === adminEmail && sessionStorage.getItem(dashboardSessionKey) === 'true') {
+        showView('dashboard');
+        listenForResponses();
+      }
     }).catch(() => { status.textContent = 'Offline mode · saved on this device'; dot.style.background = '#f1ce79'; });
   } catch (error) {
     status.textContent = 'Offline mode · saved on this device';

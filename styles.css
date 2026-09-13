@@ -39,9 +39,10 @@ h1 em { color: var(--lime); font-style: normal; }
 .login-card h2, .dashboard-header h2 { margin: 18px 0 10px; font: 800 clamp(35px, 5vw, 56px)/.95 Manrope, sans-serif; letter-spacing: -.05em; }
 .login-card h2 em { color: var(--green); font-style: normal; }
 .login-card p { color: var(--muted); }
-.login-card input[type='text'], .login-card input[type='password'] { width: 100%; margin-bottom: 17px; }
+.login-card input[type='text'], .login-card input[type='email'], .login-card input[type='password'] { width: 100%; margin-bottom: 17px; }
 .login-submit { width: 100%; justify-content: space-between; margin-top: 6px; }
-.back-link { margin-top: 17px; padding: 0; border: 0; color: var(--green); background: none; cursor: pointer; text-decoration: underline; }
+.back-link { display: block; margin-top: 17px; padding: 0; border: 0; color: var(--green); background: none; cursor: pointer; text-decoration: underline; }
+.login-card > .back-link + .back-link { margin-top: 8px; }
 .dashboard-card { padding: clamp(22px, 4vw, 40px); border-radius: 24px; background: var(--paper); box-shadow: var(--shadow); }
 .dashboard-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 25px; padding-bottom: 25px; border-bottom: 1px solid var(--line); }
 .dashboard-header h2 { margin-bottom: 7px; }
@@ -111,8 +112,8 @@ legend { display: block; width: 100%; padding: 0; margin-bottom: 6px; font-famil
 .rating-option small { max-width: 100%; overflow-wrap: anywhere; font-size: 12px; font-weight: 500; color: var(--ink); }
 .rating-option:hover, .rating-option.selected { border-color: var(--forest); background: var(--mint); transform: translateY(-3px); }
 .rating-option.selected span, .rating-option:hover span { filter: none; }
-textarea, input[type='text'], input[type='password'] { width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 13px 15px; background: white; color: var(--ink); font: inherit; resize: vertical; outline: none; }
-textarea:focus, input[type='text']:focus, input[type='password']:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(47,149,106,.13); }
+textarea, input[type='text'], input[type='email'], input[type='password'] { width: 100%; border: 1px solid var(--line); border-radius: 10px; padding: 13px 15px; background: white; color: var(--ink); font: inherit; resize: vertical; outline: none; }
+textarea:focus, input[type='text']:focus, input[type='email']:focus, input[type='password']:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(47,149,106,.13); }
 .conditional-panel, .feedback-panel { margin-top: 30px; padding: 22px; border-radius: 14px; }
 .conditional-panel { background: #fff4da; border: 1px solid #efd28e; }
 .feedback-panel { margin-top: 34px; padding: 0; border-radius: 0; background: transparent; }
