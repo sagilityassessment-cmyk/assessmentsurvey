@@ -24,7 +24,6 @@ let allResponses = [];
 let responseListener = null;
 const selectedResponseIds = new Set();
 
-const adminEmail = 'sagilityassessment@gmail.com';
 const dashboardSessionKey = 'assessment-dashboard-open';
 
 function setMessage(text, isError = false) {
@@ -198,11 +197,13 @@ document.querySelector('#loginForm').addEventListener('submit', async (event) =>
   const email = document.querySelector('#adminEmail').value.trim().toLowerCase();
   const password = document.querySelector('#adminPassword').value;
   const loginMessage = document.querySelector('#loginMessage');
-  if (email !== adminEmail) {
-    loginMessage.textContent = 'This email is not authorized for the dashboard.';
+
+  if (!email || !password) {
+    loginMessage.textContent = 'Enter both email and password.';
     loginMessage.classList.add('error');
     return;
   }
+
   try {
     await auth.signInWithEmailAndPassword(email, password);
     loginMessage.textContent = '';
@@ -219,14 +220,16 @@ document.querySelector('#loginForm').addEventListener('submit', async (event) =>
 document.querySelector('#resetPassword').addEventListener('click', async () => {
   const email = document.querySelector('#adminEmail').value.trim().toLowerCase();
   const loginMessage = document.querySelector('#loginMessage');
-  if (email !== adminEmail) {
-    loginMessage.textContent = 'Enter the authorized Gmail address to reset its password.';
+
+  if (!email) {
+    loginMessage.textContent = 'Enter the email address to reset its password.';
     loginMessage.classList.add('error');
     return;
   }
+
   try {
     await auth.sendPasswordResetEmail(email);
-    loginMessage.textContent = 'Password reset email sent. Check your Gmail inbox.';
+    loginMessage.textContent = 'Password reset email sent. Check your inbox.';
     loginMessage.classList.remove('error');
   } catch (error) {
     loginMessage.textContent = 'Unable to send the reset email. Check Firebase Auth setup.';
@@ -329,7 +332,7 @@ function initializeFirebase() {
     signIn.then((user) => {
       firebaseReady = true;
       status.textContent = 'Ready for secure submission';
-      if (user.email === adminEmail && sessionStorage.getItem(dashboardSessionKey) === 'true') {
+      if (user && user.email && sessionStorage.getItem(dashboardSessionKey) === 'true') {
         showView('dashboard');
         listenForResponses();
       }
