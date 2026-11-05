@@ -123,6 +123,8 @@ textarea:focus, input[type='text']:focus, input[type='email']:focus, input[type=
 .warning-icon { width: 24px; height: 24px; display: grid; place-items: center; flex: 0 0 auto; border-radius: 50%; color: #7d5b16; background: #f1ce79; font-weight: 800; }
 .issue-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 19px; }
 .issue-grid label { display: flex; align-items: center; gap: 7px; padding: 10px; border-radius: 8px; background: rgba(255,255,255,.63); font-size: 13px; cursor: pointer; }
+.other-issue-details { display: none; margin-bottom: 19px; }
+#issueDetails:has(#otherIssueType:checked) .other-issue-details { display: block; }
 .text-label { display: block; margin-bottom: 8px; font-weight: 700; font-size: 13px; }
 .form-actions { display: flex; justify-content: flex-end; align-items: center; gap: 13px; padding-top: 34px; }
 button { font: inherit; }
@@ -133,6 +135,13 @@ button { font: inherit; }
 .submit-button:hover { background: #1b6f50; }
 .form-message { min-height: 22px; margin: 14px 0 0; text-align: right; color: var(--green); font-size: 13px; }
 .form-message.error { color: #c14e43; }
+.success-dialog { position: relative; width: min(440px, calc(100% - 32px)); padding: 38px 32px 32px; border: 1px solid var(--line); border-radius: 20px; color: var(--ink); background: var(--paper); box-shadow: var(--shadow); text-align: center; }
+.success-dialog::backdrop { background: rgba(5, 35, 27, .58); backdrop-filter: blur(3px); }
+.success-dialog-close { position: absolute; top: 10px; right: 12px; display: grid; width: 36px; height: 36px; place-items: center; border: 0; border-radius: 50%; color: var(--muted); background: transparent; font-size: 27px; line-height: 1; cursor: pointer; }
+.success-dialog-close:hover { color: var(--forest); background: var(--mint); }
+.success-dialog-icon { display: grid; width: 54px; height: 54px; margin: 0 auto 16px; place-items: center; border-radius: 50%; color: var(--forest); background: var(--mint); font-size: 30px; font-weight: 700; }
+.success-dialog h2 { margin: 0 0 9px; font: 800 24px/1.2 Manrope, sans-serif; }
+.success-dialog p { margin: 0; color: var(--muted); }
 [hidden] { display: none !important; }
 @media (max-width: 700px) {
   .page-shell { width: min(100% - 24px, 620px); padding: 36px 0 50px; }

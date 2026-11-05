@@ -14,7 +14,9 @@ let firebaseReady = false;
 
 const form = document.querySelector('#surveyForm');
 const message = document.querySelector('#formMessage');
+const successDialog = document.querySelector('#successDialog');
 const issueDetails = document.querySelector('#issueDetails');
+const otherIssueDetails = document.querySelector('#otherIssueDetails');
 const feedbackSection = document.querySelector('#feedbackSection');
 const surveyView = document.querySelector('.page-shell');
 const loginView = document.querySelector('#loginView');
@@ -36,17 +38,30 @@ function updateIssueVisibility(value) {
   issueDetails.hidden = !hasIssues;
   feedbackSection.hidden = hasIssues;
   issueDetails.querySelectorAll('input').forEach((input) => { input.required = hasIssues && input.name === 'seatNumber'; });
-  if (!hasIssues) issueDetails.querySelectorAll('input').forEach((input) => { input.checked = false; input.value = ''; });
+  if (!hasIssues) issueDetails.querySelectorAll('input').forEach((input) => {
+    input.checked = false;
+    if (input.type !== 'checkbox') input.value = '';
+  });
+  updateOtherIssueVisibility();
   if (hasIssues) issueDetails.querySelector('#seatNumber').focus({ preventScroll: true });
 }
 
+function updateOtherIssueVisibility() {
+  const otherSelected = form.querySelector('#otherIssueType').checked;
+  const descriptionInput = otherIssueDetails.querySelector('input');
+  descriptionInput.required = otherSelected;
+  if (!otherSelected) descriptionInput.value = '';
+  else descriptionInput.focus({ preventScroll: true });
+}
+
 document.querySelectorAll('input[name="technicalIssues"]').forEach((input) => input.addEventListener('change', () => updateIssueVisibility(input.value)));
+form.querySelector('#otherIssueType').addEventListener('change', updateOtherIssueVisibility);
 
 document.querySelectorAll('.rating-row').forEach((row) => {
   row.querySelectorAll('.rating-option').forEach((button) => button.addEventListener('click', () => {
     row.querySelectorAll('.rating-option').forEach((option) => option.classList.remove('selected'));
     button.classList.add('selected');
-    form.elements[row.dataset.rating === 'comfort' ? 'comfortRating' : 'experienceRating'].value = button.dataset.value;
+    form.elements[`${row.dataset.rating}Rating`].value = button.dataset.value;
   }));
 });
 
@@ -57,6 +72,8 @@ document.querySelector('#startOver').addEventListener('click', () => {
   setMessage('');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
+
+document.querySelector('#closeSuccessDialog').addEventListener('click', () => successDialog.close());
 
 function showView(view) {
   surveyView.classList.toggle('is-hidden', view !== 'survey');
@@ -104,7 +121,7 @@ function renderResponses() {
   const rows = getVisibleResponses();
   document.querySelector('#responseCount').textContent = `${allResponses.length} response${allResponses.length === 1 ? '' : 's'}`;
   if (!rows.length) {
-    responseTableBody.innerHTML = '<tr><td colspan="12" class="empty-table">No responses found.</td></tr>';
+    responseTableBody.innerHTML = '<tr><td colspan="14" class="empty-table">No responses found.</td></tr>';
     return;
   }
   const fields = [
@@ -113,8 +130,10 @@ function renderResponses() {
     ['Location', (item) => responseValue(item, 'location')],
     ['Comfort', (item) => responseValue(item, 'comfortRating')],
     ['Experience', (item) => responseValue(item, 'experienceRating')],
+    ['Instruction clarity', (item) => responseValue(item, 'instructionsRating')],
     ['Technical issues', (item) => responseValue(item, 'technicalIssues')],
     ['Issue types', (item) => responseValue(item, 'issueTypes')],
+    ['Other issue details', (item) => responseValue(item, 'otherIssueDescription')],
     ['Seat number', (item) => responseValue(item, 'seatNumber')],
     ['Environment', (item) => responseValue(item, 'environmentFeedback')],
     ['Feedback', (item) => responseValue(item, 'feedback')]
@@ -158,11 +177,11 @@ document.querySelector('#exportResponses').addEventListener('click', () => {
     return;
   }
   const rows = getExportRows();
-  const headers = ['Submitted', 'Mode', 'Location', 'Comfort', 'Experience', 'Technical issues', 'Issue types', 'Seat number', 'Environment', 'Feedback'];
+  const headers = ['Submitted', 'Mode', 'Location', 'Comfort', 'Experience', 'Instruction clarity', 'Technical issues', 'Issue types', 'Other issue details', 'Seat number', 'Environment', 'Feedback'];
   const values = rows.map((item) => [
     formatSubmittedAt(item.submittedAt), responseValue(item, 'assessmentMode'), responseValue(item, 'location'),
-    responseValue(item, 'comfortRating'), responseValue(item, 'experienceRating'), responseValue(item, 'technicalIssues'),
-    responseValue(item, 'issueTypes'), responseValue(item, 'seatNumber'), responseValue(item, 'environmentFeedback'), responseValue(item, 'feedback')
+    responseValue(item, 'comfortRating'), responseValue(item, 'experienceRating'), responseValue(item, 'instructionsRating'), responseValue(item, 'technicalIssues'),
+    responseValue(item, 'issueTypes'), responseValue(item, 'otherIssueDescription'), responseValue(item, 'seatNumber'), responseValue(item, 'environmentFeedback'), responseValue(item, 'feedback')
   ]);
   const csv = [headers, ...values].map((row) => row.map(csvCell).join(',')).join('\r\n');
   const blob = new Blob([`\ufeff${csv}`], { type: 'text/csv;charset=utf-8;' });
@@ -311,6 +330,7 @@ form.addEventListener('submit', async (event) => {
     form.reset();
     document.querySelectorAll('.rating-option').forEach((option) => option.classList.remove('selected'));
     updateIssueVisibility('No');
+    successDialog.showModal();
   } catch (error) {
     console.error('Unable to save survey', error);
     setMessage('We could not save your feedback. Please try again.', true);

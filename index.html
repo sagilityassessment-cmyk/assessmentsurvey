@@ -24,7 +24,7 @@
     <header class="intro">
       <div class="eyebrow"><span class="eyebrow-dot"></span> Candidate experience</div>
       <h1>Assessment<br><em>Survey</em></h1>
-      <p>Please share how your assessment went while it is still fresh. Your feedback helps us make every assessment clearer, calmer, and more accessible.</p>
+      <p>Please share how your assessment went while it is still fresh. Answer honestly based on your own experience—there are no right or wrong answers. Your feedback helps us make every assessment clearer, calmer, and more accessible.</p>
       <div class="intro-meta"><span class="status-dot" id="connectionDot"></span><span id="connectionStatus">Preparing secure submission...</span><button type="button" id="openAdminLogin" class="admin-link">Admin dashboard</button></div>
     </header>
 
@@ -74,12 +74,24 @@
       </fieldset>
 
       <fieldset>
-        <legend><span class="question-number">05</span> How was the environment where you completed the assessment? <span class="required">*</span></legend>
+        <legend><span class="question-number">05</span> How clear were the assessment instructions? <span class="required">*</span></legend>
+        <div class="rating-row" data-rating="instructions" role="radiogroup" aria-label="Clarity of the assessment instructions from 1 to 5">
+          <button type="button" class="rating-option" data-value="1" aria-label="1 - Very unclear"><span>😟</span><small>Very unclear</small></button>
+          <button type="button" class="rating-option" data-value="2" aria-label="2 - Unclear"><span>🙁</span><small>Unclear</small></button>
+          <button type="button" class="rating-option" data-value="3" aria-label="3 - Neutral"><span>😐</span><small>Neutral</small></button>
+          <button type="button" class="rating-option" data-value="4" aria-label="4 - Clear"><span>🙂</span><small>Clear</small></button>
+          <button type="button" class="rating-option" data-value="5" aria-label="5 - Very clear"><span>😄</span><small>Very clear</small></button>
+        </div>
+        <input type="hidden" name="instructionsRating" required>
+      </fieldset>
+
+      <fieldset>
+        <legend><span class="question-number">06</span> How was the environment where you completed the assessment? <span class="required">*</span></legend>
         <textarea name="environmentFeedback" rows="3" placeholder="Tell us about the space, setup, or online environment..." required></textarea>
       </fieldset>
 
       <fieldset>
-        <legend><span class="question-number">06</span> Were there any technical issues during the assessment? <span class="required">*</span></legend>
+        <legend><span class="question-number">07</span> Were there any technical issues during the assessment? <span class="required">*</span></legend>
         <div class="choice-grid two-columns">
           <label class="choice-card"><input type="radio" name="technicalIssues" value="Yes" required><span>Yes</span><small>Something interrupted the assessment</small></label>
           <label class="choice-card"><input type="radio" name="technicalIssues" value="No"><span>No</span><small>Everything worked as expected</small></label>
@@ -93,13 +105,18 @@
           <label><input type="checkbox" name="issueType" value="Keyboard"><span>Keyboard</span></label>
           <label><input type="checkbox" name="issueType" value="Mouse"><span>Mouse</span></label>
           <label><input type="checkbox" name="issueType" value="Headset"><span>Headset</span></label>
+          <label><input id="otherIssueType" type="checkbox" name="issueType" value="Other"><span>Other</span></label>
+        </div>
+        <div id="otherIssueDetails" class="other-issue-details">
+          <label class="text-label" for="otherIssueDescription">If you selected Other, please describe the issue</label>
+          <input id="otherIssueDescription" name="otherIssueDescription" type="text" placeholder="Describe the issue">
         </div>
         <label class="text-label" for="seatNumber">Seat number where you encountered the issue</label>
         <input id="seatNumber" name="seatNumber" type="text" placeholder="e.g. A-12">
       </section>
 
       <section id="feedbackSection" class="feedback-panel">
-        <label class="text-label" for="feedback"><span class="question-number">07</span> What feedback, concerns, or suggestions for improvement would you like to share regarding your assessment?</label>
+        <label class="text-label" for="feedback"><span class="question-number">08</span> What feedback, concerns, or suggestions for improvement would you like to share regarding your assessment?</label>
         <textarea id="feedback" name="feedback" rows="3" placeholder="What should we keep, change, or improve?"></textarea>
       </section>
 
@@ -110,6 +127,13 @@
       <p id="formMessage" class="form-message" role="status" aria-live="polite"></p>
     </form>
   </main>
+
+  <dialog id="successDialog" class="success-dialog" aria-labelledby="successDialogTitle" aria-describedby="successDialogMessage">
+    <button type="button" id="closeSuccessDialog" class="success-dialog-close" aria-label="Close confirmation">&times;</button>
+    <div class="success-dialog-icon" aria-hidden="true">✓</div>
+    <h2 id="successDialogTitle">Thank you for submitting the form!</h2>
+    <p id="successDialogMessage">Your answers have been successfully recorded.</p>
+  </dialog>
 
   <main id="loginView" class="login-view is-hidden" aria-labelledby="loginTitle">
     <section class="login-card">
@@ -140,11 +164,11 @@
         <div class="dashboard-actions"><span id="responseCount" class="response-count">0 responses</span><button type="button" id="dashboardLogout" class="secondary-button">Log out</button></div>
       </header>
       <div class="dashboard-toolbar"><input id="tableSearch" type="search" placeholder="Search responses..." aria-label="Search responses"><button type="button" id="refreshTable" class="secondary-button">Refresh</button><label class="date-filter">From <input id="exportFromDate" type="date"></label><label class="date-filter">End <input id="exportEndDate" type="date"></label><button type="button" id="exportResponses" class="secondary-button export-button">Export CSV</button></div>
-      <div class="score-legend" aria-label="Score legend"><strong>Score legend</strong><span>1 - Very uncomfortable / Very poor</span><span>2 - Uncomfortable / Poor</span><span>3 - Neutral / Fair</span><span>4 - Comfortable / Good</span><span>5 - Very comfortable / Excellent</span></div>
+      <div class="score-legend" aria-label="Score legend"><strong>Score legend</strong><span>Comfort / experience: 1 - Very uncomfortable / Very poor</span><span>2 - Uncomfortable / Poor</span><span>3 - Neutral / Fair</span><span>4 - Comfortable / Good</span><span>5 - Very comfortable / Excellent</span><span>Instruction clarity: 1 - Very unclear, 2 - Unclear, 3 - Neutral, 4 - Clear, 5 - Very clear</span></div>
       <div class="response-table-wrap">
         <table class="response-table">
-          <thead><tr><th>Select</th><th>#</th><th>Submitted</th><th>Mode</th><th>Location</th><th>Comfort</th><th>Experience</th><th>Technical issues</th><th>Issue types</th><th>Seat number</th><th>Environment</th><th>Feedback</th></tr></thead>
-          <tbody id="responseTableBody"><tr><td colspan="12" class="empty-table">Loading responses...</td></tr></tbody>
+          <thead><tr><th>Select</th><th>#</th><th>Submitted</th><th>Mode</th><th>Location</th><th>Comfort</th><th>Experience</th><th>Instruction clarity</th><th>Technical issues</th><th>Issue types</th><th>Other issue details</th><th>Seat number</th><th>Environment</th><th>Feedback</th></tr></thead>
+          <tbody id="responseTableBody"><tr><td colspan="14" class="empty-table">Loading responses...</td></tr></tbody>
         </table>
       </div>
       <div class="table-footer-actions"><button type="button" id="selectVisible" class="secondary-button">Select all</button><button type="button" id="deleteSelected" class="secondary-button danger-button">Delete selected</button></div>
