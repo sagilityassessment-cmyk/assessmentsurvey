@@ -74,7 +74,25 @@
       </fieldset>
 
       <fieldset>
-        <legend><span class="question-number">05</span> How clear were the assessment instructions? <span class="required">*</span></legend>
+        <legend><span class="question-number">05</span> How would you rate your overall assessment experience from 1 to 10? <span class="required">*</span></legend>
+        <div class="rating-row" data-rating="experienceScore" role="radiogroup" aria-label="Overall assessment experience from 1 to 10">
+          <button type="button" class="rating-option" data-value="1" aria-label="1, lowest"><span>1</span></button>
+          <button type="button" class="rating-option" data-value="2" aria-label="2"><span>2</span></button>
+          <button type="button" class="rating-option" data-value="3" aria-label="3"><span>3</span></button>
+          <button type="button" class="rating-option" data-value="4" aria-label="4"><span>4</span></button>
+          <button type="button" class="rating-option" data-value="5" aria-label="5"><span>5</span></button>
+          <button type="button" class="rating-option" data-value="6" aria-label="6"><span>6</span></button>
+          <button type="button" class="rating-option" data-value="7" aria-label="7"><span>7</span></button>
+          <button type="button" class="rating-option" data-value="8" aria-label="8"><span>8</span></button>
+          <button type="button" class="rating-option" data-value="9" aria-label="9"><span>9</span></button>
+          <button type="button" class="rating-option" data-value="10" aria-label="10, highest"><span>10</span></button>
+        </div>
+        <div class="rating-scale-hint"><span>1 is lowest</span><span>10 is highest</span></div>
+        <input type="hidden" name="experienceScore" required>
+      </fieldset>
+
+      <fieldset>
+        <legend><span class="question-number">06</span> How clear were the assessment instructions? <span class="required">*</span></legend>
         <div class="rating-row" data-rating="instructions" role="radiogroup" aria-label="Clarity of the assessment instructions from 1 to 5">
           <button type="button" class="rating-option" data-value="1" aria-label="1 - Very unclear"><span>😟</span><small>Very unclear</small></button>
           <button type="button" class="rating-option" data-value="2" aria-label="2 - Unclear"><span>🙁</span><small>Unclear</small></button>
@@ -86,12 +104,12 @@
       </fieldset>
 
       <fieldset>
-        <legend><span class="question-number">06</span> How was the environment where you completed the assessment? <span class="required">*</span></legend>
+        <legend><span class="question-number">07</span> How was the environment where you completed the assessment? <span class="required">*</span></legend>
         <textarea name="environmentFeedback" rows="3" placeholder="Tell us about the space, setup, or online environment..." required></textarea>
       </fieldset>
 
       <fieldset>
-        <legend><span class="question-number">07</span> Were there any technical issues during the assessment? <span class="required">*</span></legend>
+        <legend><span class="question-number">08</span> Were there any technical issues during the assessment? <span class="required">*</span></legend>
         <div class="choice-grid two-columns">
           <label class="choice-card"><input type="radio" name="technicalIssues" value="Yes" required><span>Yes</span><small>Something interrupted the assessment</small></label>
           <label class="choice-card"><input type="radio" name="technicalIssues" value="No"><span>No</span><small>Everything worked as expected</small></label>
@@ -116,7 +134,7 @@
       </section>
 
       <section id="feedbackSection" class="feedback-panel">
-        <label class="text-label" for="feedback"><span class="question-number">08</span> What feedback, concerns, or suggestions for improvement would you like to share regarding your assessment?</label>
+        <label class="text-label" for="feedback"><span class="question-number">09</span> What feedback, concerns, or suggestions for improvement would you like to share regarding your assessment?</label>
         <textarea id="feedback" name="feedback" rows="3" placeholder="What should we keep, change, or improve?"></textarea>
       </section>
 
@@ -164,11 +182,11 @@
         <div class="dashboard-actions"><span id="responseCount" class="response-count">0 responses</span><button type="button" id="dashboardLogout" class="secondary-button">Log out</button></div>
       </header>
       <div class="dashboard-toolbar"><input id="tableSearch" type="search" placeholder="Search responses..." aria-label="Search responses"><button type="button" id="refreshTable" class="secondary-button">Refresh</button><label class="date-filter">From <input id="exportFromDate" type="date"></label><label class="date-filter">End <input id="exportEndDate" type="date"></label><button type="button" id="exportResponses" class="secondary-button export-button">Export CSV</button></div>
-      <div class="score-legend" aria-label="Score legend"><strong>Score legend</strong><span>Comfort / experience: 1 - Very uncomfortable / Very poor</span><span>2 - Uncomfortable / Poor</span><span>3 - Neutral / Fair</span><span>4 - Comfortable / Good</span><span>5 - Very comfortable / Excellent</span><span>Instruction clarity: 1 - Very unclear, 2 - Unclear, 3 - Neutral, 4 - Clear, 5 - Very clear</span></div>
+      <div class="score-legend" aria-label="Score legend"><strong>Score legend</strong><span>Comfort: 1 - Very uncomfortable, 2 - Uncomfortable, 3 - Neutral, 4 - Comfortable, 5 - Very comfortable</span><span>Overall experience: 1 is lowest, 10 is highest</span><span>Experience emoji rating: 1 - Very poor, 2 - Poor, 3 - Fair, 4 - Good, 5 - Excellent</span><span>Instruction clarity: 1 - Very unclear, 2 - Unclear, 3 - Neutral, 4 - Clear, 5 - Very clear</span></div>
       <div class="response-table-wrap">
         <table class="response-table">
-          <thead><tr><th>Select</th><th>#</th><th>Submitted</th><th>Mode</th><th>Location</th><th>Comfort</th><th>Experience</th><th>Instruction clarity</th><th>Technical issues</th><th>Issue types</th><th>Other issue details</th><th>Seat number</th><th>Environment</th><th>Feedback</th></tr></thead>
-          <tbody id="responseTableBody"><tr><td colspan="14" class="empty-table">Loading responses...</td></tr></tbody>
+          <thead><tr><th>Select</th><th>#</th><th>Submitted</th><th>Mode</th><th>Location</th><th>Comfort</th><th>Experience emoji rating</th><th>Experience score (1-10)</th><th>Instruction clarity</th><th>Technical issues</th><th>Issue types</th><th>Other issue details</th><th>Seat number</th><th>Environment</th><th>Feedback</th></tr></thead>
+          <tbody id="responseTableBody"><tr><td colspan="15" class="empty-table">Loading responses...</td></tr></tbody>
         </table>
       </div>
       <div class="table-footer-actions"><button type="button" id="selectVisible" class="secondary-button">Select all</button><button type="button" id="deleteSelected" class="secondary-button danger-button">Delete selected</button></div>

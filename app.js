@@ -61,7 +61,8 @@ document.querySelectorAll('.rating-row').forEach((row) => {
   row.querySelectorAll('.rating-option').forEach((button) => button.addEventListener('click', () => {
     row.querySelectorAll('.rating-option').forEach((option) => option.classList.remove('selected'));
     button.classList.add('selected');
-    form.elements[`${row.dataset.rating}Rating`].value = button.dataset.value;
+    const fieldName = row.dataset.rating === 'experienceScore' ? 'experienceScore' : `${row.dataset.rating}Rating`;
+    form.elements[fieldName].value = button.dataset.value;
   }));
 });
 
@@ -121,7 +122,7 @@ function renderResponses() {
   const rows = getVisibleResponses();
   document.querySelector('#responseCount').textContent = `${allResponses.length} response${allResponses.length === 1 ? '' : 's'}`;
   if (!rows.length) {
-    responseTableBody.innerHTML = '<tr><td colspan="14" class="empty-table">No responses found.</td></tr>';
+    responseTableBody.innerHTML = '<tr><td colspan="15" class="empty-table">No responses found.</td></tr>';
     return;
   }
   const fields = [
@@ -129,7 +130,8 @@ function renderResponses() {
     ['Mode', (item) => responseValue(item, 'assessmentMode')],
     ['Location', (item) => responseValue(item, 'location')],
     ['Comfort', (item) => responseValue(item, 'comfortRating')],
-    ['Experience', (item) => responseValue(item, 'experienceRating')],
+    ['Experience emoji rating', (item) => responseValue(item, 'experienceRating')],
+    ['Experience score (1-10)', (item) => responseValue(item, 'experienceScore')],
     ['Instruction clarity', (item) => responseValue(item, 'instructionsRating')],
     ['Technical issues', (item) => responseValue(item, 'technicalIssues')],
     ['Issue types', (item) => responseValue(item, 'issueTypes')],
@@ -177,10 +179,10 @@ document.querySelector('#exportResponses').addEventListener('click', () => {
     return;
   }
   const rows = getExportRows();
-  const headers = ['Submitted', 'Mode', 'Location', 'Comfort', 'Experience', 'Instruction clarity', 'Technical issues', 'Issue types', 'Other issue details', 'Seat number', 'Environment', 'Feedback'];
+  const headers = ['Submitted', 'Mode', 'Location', 'Comfort', 'Experience emoji rating', 'Experience score (1-10)', 'Instruction clarity', 'Technical issues', 'Issue types', 'Other issue details', 'Seat number', 'Environment', 'Feedback'];
   const values = rows.map((item) => [
     formatSubmittedAt(item.submittedAt), responseValue(item, 'assessmentMode'), responseValue(item, 'location'),
-    responseValue(item, 'comfortRating'), responseValue(item, 'experienceRating'), responseValue(item, 'instructionsRating'), responseValue(item, 'technicalIssues'),
+    responseValue(item, 'comfortRating'), responseValue(item, 'experienceRating'), responseValue(item, 'experienceScore'), responseValue(item, 'instructionsRating'), responseValue(item, 'technicalIssues'),
     responseValue(item, 'issueTypes'), responseValue(item, 'otherIssueDescription'), responseValue(item, 'seatNumber'), responseValue(item, 'environmentFeedback'), responseValue(item, 'feedback')
   ]);
   const csv = [headers, ...values].map((row) => row.map(csvCell).join(',')).join('\r\n');

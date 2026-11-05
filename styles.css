@@ -107,6 +107,10 @@ legend { display: block; width: 100%; padding: 0; margin-bottom: 6px; font-famil
 .choice-card small { color: var(--ink); font-size: 13px; font-weight: 500; margin-top: 3px; }
 .choice-card.compact { min-height: auto; text-align: center; padding: 13px 8px; }
 .rating-row { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; min-width: 0; }
+.rating-row[data-rating='experienceScore'] { grid-template-columns: repeat(10, minmax(0, 1fr)); }
+.rating-row[data-rating='experienceScore'] .rating-option { min-height: 76px; padding: 10px 4px; border-width: 2px; }
+.rating-row[data-rating='experienceScore'] .rating-option span { height: auto; min-height: 0; font-family: 'DM Sans', sans-serif; font-size: 25px; font-weight: 800; }
+.rating-scale-hint { display: flex; justify-content: space-between; margin-top: 10px; color: var(--forest); font-size: 14px; font-weight: 700; }
 .rating-option { display: flex; min-width: 0; flex-direction: column; align-items: center; justify-content: center; gap: 7px; min-height: 92px; padding: 12px 5px 13px; overflow: visible; color: var(--ink); background: white; border: 1px solid var(--line); border-radius: 13px; cursor: pointer; transition: .2s ease; }
 .rating-option span { display: flex; align-items: center; justify-content: center; width: 100%; height: 56px; min-height: 56px; padding: 0; margin: 0; font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif; font-size: clamp(25px, 4vw, 34px); line-height: 1.25; overflow: visible; filter: none; transition: .2s ease; }
 .rating-option small { max-width: 100%; overflow-wrap: anywhere; font-size: 12px; font-weight: 500; color: var(--ink); }
@@ -158,6 +162,9 @@ button { font: inherit; }
   .two-columns { grid-template-columns: 1fr; }
   .rating-row { display: flex; align-items: stretch; justify-content: stretch; gap: 7px; padding: 0 4px 6px; overflow-x: auto; overscroll-behavior-x: contain; }
   .rating-option { position: relative; flex: 1 1 0; min-width: 0; height: 104px; min-height: 104px; padding-left: 4px; padding-right: 4px; }
+  .rating-row[data-rating='experienceScore'] .rating-option { flex: 0 0 54px; min-width: 54px; height: 68px; min-height: 68px; }
+  .rating-row[data-rating='experienceScore'] .rating-option span { font-size: 23px; }
+  .rating-scale-hint { font-size: 13px; }
   .rating-option span { position: absolute; top: 8px; left: 0; width: 100%; height: 56px; min-height: 56px; }
   .rating-option small { position: absolute; right: 4px; bottom: 8px; left: 4px; min-height: 25px; display: flex; align-items: center; justify-content: center; font-size: 9px; line-height: 1.15; }
 }
